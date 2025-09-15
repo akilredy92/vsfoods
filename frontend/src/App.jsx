@@ -8,10 +8,16 @@ import ProductDetail from "./pages/ProductDetail.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import OrderSuccess from "./pages/OrderSuccess.jsx";
-import Contact from "./pages/Contact.jsx";      // <-- add this
+import Contact from "./pages/Contact.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import useAuth from "./store/auth";
 
 export default function App() {
+  const initAuth = useAuth(s => s.init);
+  React.useEffect(() => { initAuth(); }, [initAuth]);
+
   return (
     <>
       <Navbar />
@@ -22,7 +28,9 @@ export default function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success/:orderId" element={<OrderSuccess />} />
-        <Route path="/contact" element={<Contact />} />   {/* <-- add this */}
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
