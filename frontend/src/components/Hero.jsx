@@ -14,7 +14,7 @@ export default function Hero() {
       boxShadow: "var(--shadow)"
     }}>
       <img
-        src="/images/hero.jpg"
+        src="/images/beautiful-green-background-free-vector.jpg"
         alt="VS Foods hero"
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.65)" }}
       />

@@ -1,41 +1,76 @@
-//cat > frontend/src/pages/ProductDetail.jsx <<'EOF'
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { getProduct } from "../api/client";
 import useCart from "../store/cart";
-import QuantitySelector from "../components/QuantitySelector";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const [p, setP] = useState(null);
-  const [qty, setQty] = useState(1);
-  const addItem = useCart(s => s.addItem);
+  const add = useCart((s) => s.add);
+  const [product, setProduct] = React.useState(null);
+  const [qty, setQty] = React.useState(1);
+  const [err, setErr] = React.useState("");
 
-  useEffect(() => {
-    getProduct(id).then(setP).catch(console.error);
+  React.useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const p = await getProduct(id);
+        if (alive) setProduct(p);
+      } catch (e) {
+        setErr("Product not found.");
+      }
+    })();
+    return () => (alive = false);
   }, [id]);
 
-  if (!p) return <div className="container">Loading...</div>;
+  if (err) return <div className="container">{err}</div>;
+  if (!product) return <div className="container">Loading…</div>;
+
+  const total = (Number(product.price) * qty).toFixed(2);
 
   return (
-    <div className="container" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
-      <img src={p.image} alt={p.name} style={{ width: "100%", borderRadius: 16 }} />
+    <div className="container" style={{ display: "grid", gap: "1.5rem", gridTemplateColumns: "1fr 1fr" }}>
+      <div className="card" style={{ overflow: "hidden" }}>
+        <img
+          src={product.image}
+          alt={product.name}
+          onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+          style={{ width: "100%", height: 420, objectFit: "cover" }}
+        />
+      </div>
+
       <div>
-        <h2 style={{ marginTop: 0 }}>{p.name}</h2>
-        <div className="muted">{p.category} • ⭐ {p.rating}</div>
-        <p style={{ marginTop: 12 }}>{p.description}</p>
-        <div className="row" style={{ justifyContent: "space-between", marginTop: 12 }}>
-          <span className="price">${p.price.toFixed(2)}</span>
-          <QuantitySelector value={qty} onChange={setQty} />
-        </div>
-        <div style={{ marginTop: 16 }}>
-          <button
-            className="btn primary"
-            onClick={() => addItem({ id: p.id, name: p.name, price: p.price, image: p.image, quantity: qty })}
-          >
-            Add to cart
-          </button>
-        </div>
+        <h1 style={{ marginTop: 0 }}>{product.name}</h1>
+        <p className="muted" style={{ marginTop: -6 }}>{product.category}</p>
+
+        <p className="price" style={{ fontSize: 22, marginTop: 10 }}>
+          ${Number(product.price).toFixed(2)}/{product.unit || "lb"}
+        </p>
+
+        <p style={{ marginTop: 12 }}>{product.description}</p>
+
+        <div className="row" style={{ gap: 12, margin: "12px 0" }}>
+          <div className="qty">
+            <button onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+            <input value={qty} readOnly />
+            <button onClick={() => setQty((q) => q + 1)}>+</button>
+          </div>
+           <button
+              className="btn primary"
+              onClick={() =>
+                add({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  unit: product.unit,
+                  image: product.image,
+                  quantity: qty,          // ✅ add the selected qty
+                })
+              }
+            >
+              Add to cart
+            </button>
+          </div>
       </div>
     </div>
   );

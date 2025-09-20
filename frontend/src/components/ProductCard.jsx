@@ -1,18 +1,29 @@
-// cat > frontend/src/components/ProductCard.jsx <<'EOF'
 import React from "react";
 import { Link } from "react-router-dom";
 
 export default function ProductCard({ product }) {
   return (
     <div className="card">
-      <img src={product.image} alt={product.name} loading="lazy" />
+      <Link to={`/products/${product.id}`}>
+        <img
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
+          onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+          style={{ width: "100%", height: 200, objectFit: "cover" }}
+        />
+      </Link>
+
       <div className="card-body">
-        <h3 style={{ margin: "0 0 6px 0" }}>{product.name}</h3>
-        <div className="row" style={{ justifyContent: "space-between" }}>
-          <span className="muted">{product.category}</span>
-          <span className="price">${product.price.toFixed(2)}</span>
-        </div>
-        <div style={{ marginTop: 8 }}>
+        <h3 style={{ margin: 0 }}>{product.name}</h3>
+        <p className="muted" style={{ margin: 0 }}>{product.category}</p>
+
+        <div className="card-footer">
+          <span className="price">
+            ${Number(product.price).toFixed(2)}/{product.unit || "lb"}
+          </span>
+
+          {/* View button navigates to detail too */}
           <Link className="btn secondary" to={`/products/${product.id}`}>
             View
           </Link>
@@ -21,4 +32,3 @@ export default function ProductCard({ product }) {
     </div>
   );
 }
-

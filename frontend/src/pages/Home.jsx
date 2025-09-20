@@ -7,38 +7,38 @@ import SectionNav from "../components/SectionNav";
 
 // Placeholder items you can replace later (images live in /public/images)
 const sweets = [
-  { id: "sw1", name: "Ghee Mysore Pak", price: 9.25, category: "Sweets", image: "/images/placeholder-sweets-1.jpg" },
-  { id: "sw2", name: "Motichoor Ladoo", price: 8.50, category: "Sweets", image: "/images/placeholder-sweets-2.jpg" },
-  { id: "sw3", name: "Kaju Katli",     price: 11.00, category: "Sweets", image: "/images/placeholder-sweets-3.jpg" },
-  { id: "sw4", name: "Badam Burfi",    price: 10.50, category: "Sweets", image: "/images/placeholder-sweets-4.jpg" },
+  { id: "Ghee Mysore Pak", name: "Ghee Mysore Pak", price: 9.25, image: "/images/gheemysorepak.jpg" },
+  { id: "Motichoor Ladoo", name: "Motichoor Ladoo", price: 8.50, image: "/images/Motichoor-laddoo.jpg" },
+  { id: "Kaju Katli", name: "Kaju Katli",     price: 11.00, image: "/images/Kaju-Katli.jpg" },
+  { id: "Badam Burfi", name: "Badam Burfi",    price: 10.50, image: "/images/badam-burfi.jpg" },
 ];
 
 const hotOnes = [
-  { id: "hot1", name: "Chilli Murukku", price: 5.75, category: "Snacks", image: "/images/placeholder-hot-1.jpg" },
-  { id: "hot2", name: "Spicy Mixture",  price: 4.99, category: "Snacks", image: "/images/placeholder-hot-2.jpg" },
-  { id: "hot3", name: "Masala Peanuts", price: 4.50, category: "Snacks", image: "/images/placeholder-hot-3.jpg" },
-  { id: "hot4", name: "Karasev",        price: 5.25, category: "Snacks", image: "/images/placeholder-hot-4.jpg" },
+  { id: "Chilli Murukku", name: "Chilli Murukku", price: 5.75, image: "/images/murukku.jpg" },
+  { id: "Spicy Mixture", name: "Spicy Mixture",  price: 4.99, image: "/images/SpicyMixture.jpg" },
+  { id: "Masala Peanuts", name: "Masala Peanuts", price: 4.50, image: "/images/Masala-Peanuts.jpg" },
+  { id: "Karasev", name: "Karasev",        price: 5.25, image: "/images/kara-sev.jpg" },
 ];
 
 const eveningSnacks = [
-  { id: "ev1", name: "Onion Pakoda",   price: 4.75, category: "Snacks", image: "/images/placeholder-evening-1.jpg" },
-  { id: "ev2", name: "Samosa (2pc)",   price: 3.50, category: "Snacks", image: "/images/placeholder-evening-2.jpg" },
-  { id: "ev3", name: "Vada (2pc)",     price: 3.75, category: "Snacks", image: "/images/placeholder-evening-3.jpg" },
-  { id: "ev4", name: "Banana Chips",   price: 3.99, category: "Snacks", image: "/images/placeholder-evening-4.jpg" },
+  { id: "Onion Pakoda", name: "Onion Pakoda",   price: 4.75, image: "/images/Onion-Pakora.jpg" },
+  { id: "Samosa (2pc)", name: "Samosa (2pc)",   price: 5.50, image: "/images/samosa.jpg" },
+  { id: "Vada (2pc)", name: "Vada (2pc)",     price: 5.75, image: "/images/Medu-Vada.jpg" },
+  { id: "Samosa Chaat", name: "Samosa Chaat",   price: 6.99, image: "/images/samosa-chaat.jpg" },
 ];
 
 const picklesVeg = [
-  { id: "pv1", name: "Mango Pickle",   price: 7.99, category: "Pickles", image: "/images/placeholder-pickle-veg-1.jpg" },
-  { id: "pv2", name: "Lemon Pickle",   price: 6.99, category: "Pickles", image: "/images/placeholder-pickle-veg-2.jpg" },
-  { id: "pv3", name: "Gongura Pickle", price: 8.50, category: "Pickles", image: "/images/placeholder-pickle-veg-3.jpg" },
-  { id: "pv4", name: "Tomato Pickle",  price: 7.25, category: "Pickles", image: "/images/placeholder-pickle-veg-4.jpg" },
+  { id: "Classic Mango Pickle", name: "Mango Pickle",   price: 7.99, image: "/images/mango-pickle.jpg" },
+  { id: "Lemon Pickle", name: "Lemon Pickle",   price: 6.99, image: "/images/lemon-pickle.jpg" },
+  { id: "Gongura Pickle", name: "Gongura Pickle", price: 8.50, image: "/images/gongura_pickle.jpg" },
+  { id: "Tomato Pickle", name: "Tomato Pickle",  price: 7.25, image: "/images/tomato-pickle.jpg" },
 ];
 
 const picklesNonVeg = [
-  { id: "pn1", name: "Prawn Pickle",     price: 12.99, category: "Pickles", image: "/images/placeholder-pickle-nv-1.jpg" },
-  { id: "pn2", name: "Chicken Pickle",   price: 11.99, category: "Pickles", image: "/images/placeholder-pickle-nv-2.jpg" },
-  { id: "pn3", name: "Mutton Pickle",    price: 13.99, category: "Pickles", image: "/images/placeholder-pickle-nv-3.jpg" },
-  { id: "pn4", name: "Fish Pickle",      price: 12.50, category: "Pickles", image: "/images/placeholder-pickle-nv-4.jpg" },
+  { id: "Chicken Pickle", name: "Chicken Pickle",     price: 12.99, image: "/images/chicken-pickle-with-bone.jpg" },
+  { id: "Chicken Pickle Boneless", name: "Chicken Pickle Boneless",   price: 11.99, image: "/images/chicken-pickle-without-bone.jpg" },
+  { id: "Mutton Pickle", name: "Mutton Pickle",    price: 13.99, image: "/images/mutton-pickle.jpg" },
+  { id: "Fish Pickle", name: "Fish Pickle",      price: 13.50, image: "/images/fish-pickle.jpg" },
 ];
 
 export default function Home() {
