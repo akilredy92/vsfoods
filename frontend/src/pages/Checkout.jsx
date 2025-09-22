@@ -1,104 +1,163 @@
+// src/pages/Checkout.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import useCart from "../store/cart";
-import useAuth from "../store/auth";
-import { createOrder } from "../api/client";
+import { useCart } from "../store/cartContext";
+import { useUser } from "../store/userContext";
+import { Link } from "react-router-dom";
 
 export default function Checkout() {
-  const items = useCart(s => s.items);
-  const totalLocal = useCart(s => s.total)(); // local calc (no discount)
-  const clear = useCart(s => s.clear);
-  const { user } = useAuth();
-  const nav = useNavigate();
+  const { cart, clearCart } = useCart();
+  const { user } = useUser();
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+    email: "",
+    phone: ""
+  });
 
-  const [customer, setCustomer] = useState({ name: "", email: "" });
-  const [loading, setLoading] = useState(false);
-  const [serverTotal, setServerTotal] = useState(null);
-  const [error, setError] = useState("");
-
-  const submit = async (e) => {
-    e.preventDefault();
-    setLoading(true); setError("");
-    try {
-      const order = await createOrder({ items, customer });
-      setServerTotal(order.total);
-      clear();
-      nav(`/order-success/${order.orderId}`);
-    } catch (err) {
-      setError("Failed to place order. Try again.");
-    } finally {
-      setLoading(false);
-    }
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  if (!items.length) {
-    return <div className="container">Your cart is empty.</div>;
-  }
-
-  // simple estimate: if logged in, show 10% off preview (final total from server)
-  const estimatedDiscount = user ? +(totalLocal * 0.10).toFixed(2) : 0;
-  const estimatedTotal = user ? +(totalLocal - estimatedDiscount).toFixed(2) : totalLocal;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Order placed successfully!");
+    clearCart();
+  };
 
   return (
-    <div className="container">
-      <h2>Checkout</h2>
-
-      {!user && (
-        <div className="card strip" style={{ padding: ".8rem 1rem", marginBottom: "1rem" }}>
-          <strong>Register & get 10% off!</strong>
-          <div className="muted">Create a free account and your order gets an instant discount.</div>
-          <div style={{ marginTop: 8 }}>
-            <Link className="btn primary" to="/signup">Register now</Link>
+    <div className="container" style={{ maxWidth: "600px", margin: "2rem auto" }}>
+      {/* Greeting if user is logged in */}
+      {user ? (
+        <p style={{ fontWeight: 600, marginBottom: "1rem" }}>
+          Hi {user.firstName || "there"}!
+        </p>
+      ) : (
+        <div
+          style={{
+            background: "#fff7d6",
+            padding: "1rem",
+            borderRadius: "8px",
+            marginBottom: "1rem",
+            border: "1px solid #facc15"
+          }}
+        >
+          <strong>Register & get 5% off!</strong>
+          <p style={{ margin: "0.25rem 0 0" }}>
+            Create a free account and your order gets an instant discount.
+          </p>
+          <div style={{ marginTop: "0.5rem", display: "flex", gap: "0.5rem" }}>
+            <Link to="/signup" className="btn primary">
+              Register
+            </Link>
+            <Link to="/login" className="btn secondary">
+              Login
+            </Link>
           </div>
         </div>
       )}
 
-      <form onSubmit={submit} className="card" style={{ padding: "1rem", display: "grid", gap: "0.75rem" }}>
+      {/* Checkout Form */}
+      <form onSubmit={handleSubmit} className="card" style={{ padding: "1.5rem" }}>
+        <h2 style={{ marginBottom: "1rem" }}>Checkout</h2>
+
+        {!user && (
+          <>
+            <div className="row">
+              <input
+                name="firstName"
+                placeholder="First Name"
+                value={form.firstName}
+                onChange={handleChange}
+                required
+              />
+              <input
+                name="lastName"
+                placeholder="Last Name"
+                value={form.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </>
+        )}
+
+        {user && (
+          <>
+            <div className="row">
+              <input
+                name="firstName"
+                placeholder="First Name"
+                value={form.firstName}
+                onChange={handleChange}
+                required
+              />
+              <input
+                name="lastName"
+                placeholder="Last Name"
+                value={form.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </>
+        )}
+
+        <input
+          name="street"
+          placeholder="Street Address"
+          value={form.street}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="city"
+          placeholder="City"
+          value={form.city}
+          onChange={handleChange}
+          required
+        />
         <div className="row">
           <input
+            name="state"
+            placeholder="State"
+            value={form.state}
+            onChange={handleChange}
             required
-            placeholder="Your name"
-            value={customer.name}
-            onChange={e => setCustomer({ ...customer, name: e.target.value })}
-            className="input"
-            style={{ width: "50%" }}
           />
           <input
+            name="zip"
+            placeholder="Zipcode"
+            value={form.zip}
+            onChange={handleChange}
             required
-            type="email"
-            placeholder="you@example.com"
-            value={customer.email}
-            onChange={e => setCustomer({ ...customer, email: e.target.value })}
-            className="input"
-            style={{ width: "50%" }}
           />
         </div>
 
-        <div>
-          <div className="row" style={{ justifyContent: "space-between" }}>
-            <span>Subtotal</span>
-            <strong>${totalLocal.toFixed(2)}</strong>
-          </div>
-          {user && (
-            <>
-              <div className="row" style={{ justifyContent: "space-between" }}>
-                <span>Member discount (10%)</span>
-                <strong>- ${estimatedDiscount.toFixed(2)}</strong>
-              </div>
-              <div className="row" style={{ justifyContent: "space-between" }}>
-                <span>Estimated total</span>
-                <strong>${estimatedTotal.toFixed(2)}</strong>
-              </div>
-            </>
-          )}
+        <div className="row">
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+          />
+          <input
+            name="phone"
+            type="tel"
+            placeholder="Phone"
+            value={form.phone}
+            onChange={handleChange}
+          />
         </div>
 
-        {error && <div style={{ color: "crimson" }}>{error}</div>}
-
-        <button className="btn primary" disabled={loading}>{loading ? "Placing…" : "Place order"}</button>
-        <p className="muted" style={{ marginTop: 8 }}>This is a demo checkout — no real payment is processed.</p>
+        <button type="submit" className="btn primary" style={{ marginTop: "1rem" }}>
+          Place Order
+        </button>
       </form>
     </div>
   );
 }
-

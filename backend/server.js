@@ -183,7 +183,7 @@ app.post("/api/orders", async (req, res) => {
 
   const subtotal = items.reduce((sum, i) => sum + (Number(i.price) * Number(i.quantity || 1)), 0);
   const isMember = Boolean(req.user?.id);
-  const discountRate = isMember ? 0.10 : 0;
+  const discountRate = isMember ? 0.5 : 0;
   const discount = +(subtotal * discountRate).toFixed(2);
   const total = +(subtotal - discount).toFixed(2);
 
@@ -195,13 +195,13 @@ app.post("/api/orders", async (req, res) => {
       `<tr><td>${i.name}</td><td>${i.quantity}</td><td>$${Number(i.price).toFixed(2)}</td></tr>`
     ).join("");
     await sendOwnerEmail({
-      subject: `New Order ${orderId} — $${total.toFixed(2)}${isMember ? " (10% member discount)" : ""}`,
+      subject: `New Order ${orderId} — $${total.toFixed(2)}${isMember ? " (5% member discount)" : ""}`,
       html: `
         <h2>New Order Received</h2>
         <p><strong>Order ID:</strong> ${orderId}</p>
         <p><strong>Customer:</strong> ${customer?.name || "Guest"} &lt;${customer?.email || "n/a"}&gt;</p>
         <p><strong>Created:</strong> ${createdAt}</p>
-        ${isMember ? "<p><strong>Member discount:</strong> 10% applied</p>" : ""}
+        ${isMember ? "<p><strong>Member discount:</strong> 5% applied</p>" : ""}
         <table border="1" cellpadding="6" cellspacing="0">
           <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
           <tbody>${rows}</tbody>

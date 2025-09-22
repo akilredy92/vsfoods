@@ -1,54 +1,49 @@
 import { create } from "zustand";
-import { login as apiLogin, signup as apiSignup, me as apiMe } from "../api/client";
 
-const useAuth = create((set) => ({
-  user: null,
-  token: localStorage.getItem("vsfoods_token") || "",
-  loading: false,
-  error: "",
+const LOCAL_KEY = "vsfoods_auth_v1";
 
-  init: async () => {
-    const token = localStorage.getItem("vsfoods_token");
-    if (!token) return;
+const useAuth = create((set, get) => ({
+  user: null,         // { id, firstName, lastName, email, phone, token? }
+
+  init: () => {
     try {
-      const { user } = await apiMe();
-      set({ user, token, error: "" });
-    } catch {
-      localStorage.removeItem("vsfoods_token");
-      set({ user: null, token: "", error: "" });
-    }
+      const raw = localStorage.getItem(LOCAL_KEY);
+      if (raw) set({ user: JSON.parse(raw) });
+    } catch {}
   },
 
-  login: async (email, password) => {
-    set({ loading: true, error: "" });
-    try {
-      const { token, user } = await apiLogin({ email, password });
-      localStorage.setItem("vsfoods_token", token);
-      set({ user, token, loading: false });
-      return true;
-    } catch (e) {
-      set({ loading: false, error: "Invalid email or password" });
-      return false;
-    }
+  register: async (profile) => {
+    // If you have a backend, call it here and set the result (user + token)
+    // const res = await fetch("/api/auth/signup", { ... });
+    // const data = await res.json();
+
+    // For now, just store locally:
+    const user = {
+      id: crypto.randomUUID(),
+      firstName: profile.firstName?.trim() || "Customer",
+      lastName: profile.lastName?.trim() || "",
+      email: profile.email?.trim() || "",
+      phone: profile.phone?.trim() || "",
+      isRegistered: true,
+      // token: data.token, // when your backend returns one
+    };
+    set({ user });
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(user));
+    return user;
   },
 
-  signup: async (name, email, password) => {
-    set({ loading: true, error: "" });
-    try {
-      const { token, user } = await apiSignup({ name, email, password });
-      localStorage.setItem("vsfoods_token", token);
-      set({ user, token, loading: false });
-      return true;
-    } catch (e) {
-      set({ loading: false, error: e?.response?.data?.error || "Signup failed" });
-      return false;
-    }
+  login: async (creds) => {
+    // TODO: call backend /api/auth/login, then:
+    const user = { id: "demo", firstName: "Guest", isRegistered: true };
+    set({ user });
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(user));
+    return user;
   },
 
   logout: () => {
-    localStorage.removeItem("vsfoods_token");
-    set({ user: null, token: "" });
-  }
+    set({ user: null });
+    localStorage.removeItem(LOCAL_KEY);
+  },
 }));
 
 export default useAuth;
