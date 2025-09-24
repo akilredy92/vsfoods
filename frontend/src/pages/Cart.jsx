@@ -1,22 +1,104 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import useCart from "../store/cart";
+// src/pages/Cart.jsx
+import React, { useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../store/cartContext.jsx";
+
+/** Pull an array of cart lines out of any common cart context shape */
+function useCartLines() {
+  try {
+    const ctx = useCart();
+
+    // Prefer explicit arrays
+    if (Array.isArray(ctx?.items)) return [ctx, ctx.items];
+    if (Array.isArray(ctx?.cart)) return [ctx, ctx.cart];
+
+    // Redux-like state
+    if (Array.isArray(ctx?.state?.items)) return [ctx, ctx.state.items];
+    if (Array.isArray(ctx?.state?.cart)) return [ctx, ctx.state.cart];
+
+    // Nothing yet (e.g., during hot-reload) → empty
+    return [ctx, []];
+  } catch {
+    // Provider not mounted yet → empty
+    return [undefined, []];
+  }
+}
+
+/** Get a numeric count for the navbar badge etc. */
+function linesCount(lines) {
+  return lines.reduce((n, line) => n + (Number(line?.qty ?? line?.quantity ?? 1) || 0), 0);
+}
+
+/** Get per-line info regardless of field names */
+function normalizeLine(line) {
+  const product = line.product ?? line.item ?? line;
+  const qty = Number(line.qty ?? line.quantity ?? 1) || 1;
+  const price = Number(product?.price ?? line.price ?? 0) || 0;
+
+  return {
+    id: product?.id ?? product?.slug ?? product?.name ?? line.id,
+    name: product?.name ?? line.name ?? "Item",
+    image: product?.image ?? line.image,
+    unit: product?.unit ?? "lb",
+    price,
+    qty,
+    product,
+    raw: line,
+    total: price * qty,
+  };
+}
 
 export default function Cart() {
-  // pull everything we need from the zustand store
-  const items = useCart((s) => s.items) || [];
-  const inc = useCart((s) => s.inc);
-  const dec = useCart((s) => s.dec);
-  const remove = useCart((s) => s.remove);
-  const subtotal = useCart((s) => s.subtotal);
+  const navigate = useNavigate();
+  const [ctx, rawLines] = useCartLines();
 
-  // guard against store not being ready to avoid crashes
-  const safeItems = Array.isArray(items) ? items : [];
+  const lines = useMemo(() => rawLines.map(normalizeLine), [rawLines]);
 
-  if (!safeItems.length) {
+  const subtotal = useMemo(
+    () => lines.reduce((s, l) => s + l.total, 0),
+    [lines]
+  );
+
+  // --- Cart API adapters (work across different context implementations) ---
+  const setQty = (line, nextQty) => {
+    if (!ctx) return;
+
+    // common APIs first
+    if (typeof ctx.updateQty === "function") return ctx.updateQty(line.product, nextQty);
+    if (typeof ctx.setQty === "function") return ctx.setQty(line.product, nextQty);
+    if (typeof ctx.addToCart === "function") return ctx.addToCart(line.product, nextQty); // some libs overwrite
+    if (typeof ctx.addItem === "function") return ctx.addItem(line.product, nextQty);
+
+    // reducer-style
+    if (typeof ctx.dispatch === "function") {
+      return ctx.dispatch({ type: "SET_QTY", payload: { product: line.product, qty: nextQty } });
+    }
+  };
+
+  const removeLine = (line) => {
+    if (!ctx) return;
+
+    if (typeof ctx.removeFromCart === "function") return ctx.removeFromCart(line.product);
+    if (typeof ctx.removeItem === "function") return ctx.removeItem(line.product);
+
+    if (typeof ctx.dispatch === "function") {
+      return ctx.dispatch({ type: "REMOVE", payload: { product: line.product } });
+    }
+  };
+
+  const clearCart = () => {
+    if (!ctx) return;
+
+    if (typeof ctx.clearCart === "function") return ctx.clearCart();
+    if (typeof ctx.dispatch === "function") return ctx.dispatch({ type: "CLEAR" });
+  };
+
+  // --- UI ---
+
+  if (lines.length === 0) {
     return (
-      <div className="container" style={{ padding: "1rem 0" }}>
-        <h1>Your Cart</h1>
+      <div className="container" style={{ padding: "2rem 1rem" }}>
+        <h2>Your Cart</h2>
         <p className="muted">Your cart is empty.</p>
         <Link className="btn primary" to="/products">Browse products</Link>
       </div>
@@ -24,48 +106,64 @@ export default function Cart() {
   }
 
   return (
-    <div className="container" style={{ padding: "1rem 0" }}>
-      <h1 style={{ marginBottom: 12 }}>Your Cart</h1>
+    <div className="container" style={{ padding: "1.5rem 1rem 2.5rem" }}>
+      <h2 style={{ marginBottom: "1rem" }}>Your Cart</h2>
 
-      <div className="grid" style={{ gap: "1rem" }}>
-        {safeItems.map((it) => (
-          <div key={it.id} className="card" style={{ display: "grid", gridTemplateColumns: "96px 1fr auto", gap: 12, alignItems: "center" }}>
-            <img
-              src={it.image || "/images/placeholder.jpg"}
-              alt={it.name}
-              onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
-              style={{ width: 96, height: 96, objectFit: "cover", borderTopLeftRadius: 14, borderBottomLeftRadius: 14 }}
-            />
-
-            <div className="card-body" style={{ padding: "0.8rem 0" }}>
-              <h3 style={{ margin: 0 }}>{it.name}</h3>
-              <p className="muted" style={{ margin: 0 }}>
-                ${Number(it.price).toFixed(2)}/{it.unit || "lb"}
-              </p>
-
-              <div className="row" style={{ marginTop: 8, gap: 8 }}>
-                <div className="qty">
-                  <button onClick={() => dec(it.id)}>−</button>
-                  <input readOnly value={Number(it.quantity) || 1} />
-                  <button onClick={() => inc(it.id)}>+</button>
-                </div>
-                <button className="btn" onClick={() => remove(it.id)}>Remove</button>
+      <div className="card" style={{ padding: "1rem" }}>
+        {lines.map((l) => (
+          <div
+            key={l.id}
+            className="row"
+            style={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 12,
+              padding: ".6rem 0",
+              borderBottom: "1px solid #eee",
+            }}
+          >
+            <div className="row" style={{ alignItems: "center", gap: 12 }}>
+              {l.image && (
+                <img
+                  src={l.image}
+                  alt={l.name}
+                  style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 8 }}
+                />
+              )}
+              <div>
+                <div style={{ fontWeight: 600 }}>{l.name}</div>
+                <div className="muted">${l.price.toFixed(2)} / {l.unit}</div>
               </div>
             </div>
 
-            <div style={{ paddingRight: 12, fontWeight: 700 }}>
-              ${(Number(it.price) * Number(it.quantity || 0)).toFixed(2)}
+            <div className="row" style={{ gap: 10, alignItems: "center" }}>
+              <div className="qty">
+                <button onClick={() => setQty(l, Math.max(1, l.qty - 1))} aria-label="Decrease">−</button>
+                <input readOnly value={l.qty} />
+                <button onClick={() => setQty(l, Math.min(99, l.qty + 1))} aria-label="Increase">+</button>
+              </div>
+
+              <div style={{ width: 88, textAlign: "right", fontWeight: 700 }}>
+                ${l.total.toFixed(2)}
+              </div>
+
+              <button className="btn" onClick={() => removeLine(l)} aria-label={`Remove ${l.name}`}>
+                Remove
+              </button>
             </div>
           </div>
         ))}
-      </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
-        <Link to="/products" className="btn">Continue shopping</Link>
+        <div className="row" style={{ justifyContent: "space-between", paddingTop: "1rem" }}>
+          <div className="muted">Items: {linesCount(lines)}</div>
+          <div style={{ fontWeight: 800, fontSize: 18 }}>Subtotal: ${subtotal.toFixed(2)}</div>
+        </div>
 
-        <div className="row" style={{ alignItems: "center", gap: 16 }}>
-          <div className="price">Subtotal: ${subtotal().toFixed(2)}</div>
-          <Link to="/checkout" className="btn primary">Checkout</Link>
+        <div className="row" style={{ gap: 12, marginTop: 12, justifyContent: "flex-end" }}>
+          <button className="btn" onClick={clearCart}>Clear cart</button>
+          <button className="btn primary" onClick={() => navigate("/checkout")}>
+            Checkout
+          </button>
         </div>
       </div>
     </div>

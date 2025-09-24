@@ -10,7 +10,19 @@ const sweets = [
   { id: "Ghee Mysore Pak", name: "Ghee Mysore Pak", price: 9.25, image: "/images/gheemysorepak.jpg" },
   { id: "Motichoor Ladoo", name: "Motichoor Ladoo", price: 8.50, image: "/images/Motichoor-laddoo.jpg" },
   { id: "Kaju Katli", name: "Kaju Katli",     price: 11.00, image: "/images/Kaju-Katli.jpg" },
-  { id: "Badam Burfi", name: "Badam Burfi",    price: 10.50, image: "/images/badam-burfi.jpg" },
+  { id: "Boondi laddu", name: "Boondi laddu",    price: 10.50, image: "/images/badam-burfi.jpg" },
+  { id: "Ravva Laddu", name: "Ravva Laddu",    price: 10.50, image: "/images/Boondi-Laddu.jpg" },
+  { id: "Sunnundalu", name: "Sunnundalu",    price: 10.50, image: "/images/sunnundalu.jpg" },
+  { id: "Bellam Gavvalu", name: "Bellam Gavvalu",    price: 10.50, image: "/images/Bellam Gavvalu.jpg" },
+  { id: "Arisalu", name: "Arisalu",    price: 10.50, image: "/images/Arisalu.jpg" },
+  { id: "Palli Patti", name: "Palli Patti",    price: 10.50, image: "/images/Palli Patti.jpg" },
+  { id: "Baadusha", name: "Baadusha",    price: 10.50, image: "/images/Baadusha.jpg" },
+  { id: "Kakinada Kaaja", name: "Kakinada Kaaja",    price: 10.50, image: "/images/Kakinada Kaaja.jpg" },
+  { id: "Kaju Pista Roll", name: "Kaju Pista Roll",    price: 10.50, image: "/images/Kaju Pista Roll.jpg" },
+  { id: "Ragi Laddu", name: "Ragi Laddu",    price: 10.50, image: "/images/Ragi Laddu.jpg" },
+  { id: "Dry fruit Laddu", name: "Dry fruit Laddu",    price: 10.50, image: "/images/Dry fruit Laddu.jpg" },
+  { id: "Coconut Sweet", name: "Coconut Sweet",    price: 10.50, image: "/images/Kobari-Louse.jpg" },
+
 ];
 
 const hotOnes = [
@@ -18,6 +30,13 @@ const hotOnes = [
   { id: "Spicy Mixture", name: "Spicy Mixture",  price: 4.99, image: "/images/SpicyMixture.jpg" },
   { id: "Masala Peanuts", name: "Masala Peanuts", price: 4.50, image: "/images/Masala-Peanuts.jpg" },
   { id: "Karasev", name: "Karasev",        price: 5.25, image: "/images/kara-sev.jpg" },
+  { id: "Kaarapusa", name: "Kaarapusa",        price: 5.25, image: "/images/Kaarapusa.jpg" },
+  { id: "Chekkalu", name: "Chekkalu",        price: 5.25, image: "/images/Chekkalu.jpg" },
+  { id: "Kaara Boondi", name: "Kaara Boondi",        price: 5.25, image: "/images/kara-boondi.jpg" },
+  { id: "Dalmudi Mixture", name: "Dalmudi Mixture",        price: 5.25, image: "/images/Dalmudi Mixture.jpg" },
+  { id: "Chakodi", name: "Chakodi",        price: 5.25, image: "/images/chakodi.jpg" },
+  { id: "Aaku Pakodi", name: "Aaku Pakodi",        price: 5.25, image: "/images/Aakupakodi.jpg" },
+  { id: "Chakli", name: "Chakli",        price: 5.25, image: "/images/Chakli.jpg" },
 ];
 
 const eveningSnacks = [

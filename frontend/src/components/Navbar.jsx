@@ -2,25 +2,35 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useUser } from "../store/userContext.jsx";
 import { useCart } from "../store/cartContext.jsx";
+import "../styles.css"; // make sure styles.css is imported so media query applies
 
 export default function Navbar() {
   const { user, logout } = useUser();
 
-  // Guard in case hot-reload races before provider mounts
   let count = 0;
   try {
     const cartCtx = useCart();
-    count = cartCtx?.count ?? (Array.isArray(cartCtx?.cart) ? cartCtx.cart.reduce((n,i)=>n+(Number(i.quantity)||0),0) : 0);
+    count =
+      cartCtx?.count ??
+      (Array.isArray(cartCtx?.cart)
+        ? cartCtx.cart.reduce((n, i) => n + (Number(i.quantity) || 0), 0)
+        : 0);
   } catch {
     count = 0;
   }
 
   return (
     <>
-      <div className="dev-banner">🚧 Work Zone — This site is still under development</div>
+      <div className="dev-banner">
+        🚧 Work Zone — This site is still under development
+      </div>
       <header>
         <div className="nav container">
-          <Link to="/" style={{ fontWeight: 800, fontSize: 22 }}>VS Foods</Link>
+          {/* Logo + Text together */}
+          <Link to="/" className="logo-link">
+            <img src="/images/new vsfoods.jpg" alt="VS Foods Logo" className="logo-img" />
+            <span className="logo-text">VS Foods</span>
+          </Link>
 
           <nav className="row" style={{ gap: 16, alignItems: "center" }}>
             <NavLink to="/products">Products</NavLink>
@@ -29,7 +39,9 @@ export default function Navbar() {
             {user ? (
               <div className="row" style={{ gap: 8, alignItems: "center" }}>
                 <span className="muted">Hi, {user.firstName || "Customer"}</span>
-                <button className="btn" onClick={logout}>Logout</button>
+                <button className="btn" onClick={logout}>
+                  Logout
+                </button>
               </div>
             ) : (
               <>

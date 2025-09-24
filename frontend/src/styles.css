@@ -255,3 +255,118 @@ label { font-size: .92rem; color: #374151; }
   padding: 0 5px; border-radius: 999px; background: #ef4444; color: #fff;
   font-size: 12px; display: inline-flex; align-items: center; justify-content: center;
 }
+.scroll-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;   /* smooth snapping */
+}
+
+.scroll-row::-webkit-scrollbar {
+  height: 8px;         /* scrollbar height */
+}
+.scroll-row::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.scroll-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-item {
+  flex: 0 0 auto;        /* prevent shrinking */
+  width: 220px;          /* card width */
+  scroll-snap-align: start;
+}
+/* Wrapper positions the nav buttons */
+.scroll-wrap {
+  position: relative;
+}
+
+/* Horizontal scroll row (you likely already have this) */
+.scroll-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth; /* for instant keyboard scroll smoothness */
+}
+.scroll-row::-webkit-scrollbar { height: 8px; }
+.scroll-row::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+.scroll-row::-webkit-scrollbar-track { background: transparent; }
+
+.scroll-item {
+  flex: 0 0 auto;
+  width: 220px;
+  scroll-snap-align: start;
+}
+
+/* Prev/Next buttons */
+.scroll-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 38px;
+  width: 38px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  display: grid; place-items: center;
+  color: #111827;
+  cursor: pointer;
+  opacity: 0;           /* hidden by default */
+  pointer-events: none; /* until .show */
+  transition: opacity .15s ease;
+  z-index: 5;
+}
+.scroll-wrap:hover .scroll-nav.show,
+.scroll-nav:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.scroll-nav.prev { left: -6px; }
+.scroll-nav.next { right: -6px; }
+.scroll-nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+.container::-webkit-scrollbar {
+  height: 8px;
+}
+.container::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+/* Navbar logo styling */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 65px;
+  width: 65px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--text);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo-img {
+    height: 45px;
+    width: 45px;
+  }
+  .logo-text {
+    font-size: 20px;
+  }
+}

@@ -1,20 +1,22 @@
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App.jsx";
-import "./styles.css";
+import App from "./App";
+import { UserProvider } from "./store/userContext";
+import { CartProvider } from "./store/cartContext";
 
-import { UserProvider } from "./store/userContext.jsx";
-import { CartProvider } from "./store/cartContext.jsx";
+// 👇 make sure this path matches where you saved the big CSS file
+import "./styles.css";   // or "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <UserProvider>
-        <CartProvider>
+    <UserProvider>
+      <CartProvider>
+        <BrowserRouter>
           <App />
-        </CartProvider>
-      </UserProvider>
-    </BrowserRouter>
+        </BrowserRouter>
+      </CartProvider>
+    </UserProvider>
   </React.StrictMode>
 );

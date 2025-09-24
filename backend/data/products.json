@@ -1,6 +1,6 @@
 [
   {
-    "id": "Classic Mango Pickle",
+    "id": "Classic-Mango-Pickle",
     "name": "Classic Mango Pickle",
     "price": 7.99,
     "unit": "lb",
@@ -13,7 +13,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Masala Peanuts",
+    "id": "Masala-Peanuts",
     "name": "Masala Peanuts",
     "price": 4.5,
     "unit": "lb",
@@ -26,7 +26,7 @@
     "description": "Crispy peanuts tossed in our signature spice blend. Perfect tea-time snack."
   },
   {
-    "id": "Ghee Mysore Pak",
+    "id": "Ghee-Mysore-Pak",
     "name": "Ghee Mysore Pak",
     "price": 9.25,
     "unit": "lb",
@@ -39,7 +39,7 @@
     "description": "Melt-in-mouth traditional Mysore Pak made with pure ghee."
   },
   {
-    "id": "Motichoor Ladoo",
+    "id": "Motichoor-Ladoo",
     "name": "Motichoor Ladoo",
     "price": 5.75,
     "unit": "lb",
@@ -52,7 +52,7 @@
     "description": "Crispy, twisted rice-flour snacks with a mild chilli kick."
   },
   {
-    "id": "Kaju Katli",
+    "id": "Kaju-Katli",
     "name": "Kaju Katli",
     "price": 7.99,
     "unit": "lb",
@@ -65,7 +65,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Badam Burfi",
+    "id": "Badam-Burfi",
     "name": "Badam Burfi",
     "price": 7.99,
     "unit": "lb",
@@ -77,7 +77,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Spicy Mixture",
+    "id": "Spicy-Mixture",
     "name": "Spicy Mixture",
     "price": 7.99,
     "unit": "lb",
@@ -90,7 +90,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Chilli Murukku",
+    "id": "Chilli-Murukku",
     "name": "Chilli Murukku",
     "price": 7.99,
     "unit": "lb",
@@ -99,7 +99,92 @@
     "isVeg": true,
     "rating": 4.7,
     "stock": 120,
-    "image": "/images/murukku.jpg"},
+    "image": "/images/murukku.jpg"
+  },
+  {
+    "id": "Kaarapusa",
+    "name": "Kaarapusa",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Kaarapusa.jpg"
+  },
+  {
+    "id": "Chekkalu",
+    "name": "Chekkalu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Chekkalu.jpg"
+  },
+  {
+    "id": "Kaara-Boondi",
+    "name": "Kaara Boondi",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/kara-boondi.jpg"
+  },
+  {
+    "id": "Dalmudi-Mixture",
+    "name": "Dalmudi Mixture",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Dalmudi Mixture.jpg"
+  },
+  {
+    "id": "Chakodi",
+    "name": "Chakodi",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/chakodi.jpg"
+  },
+  {
+    "id": "Aaku-Pakodi",
+    "name": "Aaku Pakodi",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Aakupakodi.jpg"
+  },
+  {
+    "id": "Chakli",
+    "name": "Chakli",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Snacks",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Chakli.jpg"
+  },
   {
     "id": "Karasev",
     "name": "Karasev",
@@ -114,7 +199,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Onion Pakoda",
+    "id": "Onion-Pakoda",
     "name": "Onion Pakoda",
     "price": 7.99,
     "unit": "lb",
@@ -127,7 +212,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Samosa (2pc)",
+    "id": "Samosa",
     "name": "Samosa (2pc)",
     "price": 7.99,
     "unit": "lb",
@@ -140,7 +225,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Vada (2pc)",
+    "id": "Vada",
     "name": "Vada (2pc)",
     "price": 7.99,
     "unit": "lb",
@@ -153,7 +238,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Samosa Chaat",
+    "id": "Samosa-Chaat",
     "name": "Samosa Chaat",
     "price": 7.99,
     "unit": "lb",
@@ -166,7 +251,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Lemon Pickle",
+    "id": "Lemon-Pickle",
     "name": "Lemon Pickle",
     "price": 7.99,
     "unit": "lb",
@@ -179,7 +264,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Gongura Pickle",
+    "id": "Gongura-Pickle",
     "name": "Gongura Pickle",
     "price": 7.99,
     "unit": "lb",
@@ -192,7 +277,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Tomato Pickle",
+    "id": "Tomato-Pickle",
     "name": "Tomato Pickle",
     "price": 7.99,
     "unit": "lb",
@@ -205,7 +290,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Chicken Pickle",
+    "id": "Chicken-Pickle",
     "name": "Chicken Pickle",
     "price": 12.99,
     "unit": "lb",
@@ -217,7 +302,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Chicken Pickle Boneless",
+    "id": "Chicken-Pickle-Boneless",
     "name": "Chicken Pickle Boneless",
     "price": 12.99,
     "unit": "lb",
@@ -229,7 +314,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Mutton Pickle",
+    "id": "Mutton-Pickle",
     "name": "Mutton Pickle",
     "price": 7.99,
     "unit": "lb",
@@ -241,7 +326,7 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Fish Pickle",
+    "id": "Fish-Pickle",
     "name": "Fish Pickle",
     "price": 7.99,
     "unit": "lb",
@@ -250,6 +335,150 @@
     "rating": 4.7,
     "stock": 120,
     "image": "/images/fish-pickle.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Boondi-laddu",
+    "name": "Boondi laddu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Boondi-Laddu.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Ravva-Laddu",
+    "name": "Ravva Laddu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Ravva Laddu.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Sunnundalu",
+    "name": "Sunnundalu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Sunnunda.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Bellam-Gavvalu",
+    "name": "Bellam Gavvalu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Bellam Gavvalu.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Arisalu",
+    "name": "Arisalu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Arisalu.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Palli-Patti",
+    "name": "Palli Patti",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Palli Patti.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Baadusha",
+    "name": "Baadusha",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Baadusha.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Kakinada-Kaaja",
+    "name": "Kakinada Kaaja",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Kakinada Kaaja.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Kaju-Pista-Roll",
+    "name": "Kaju Pista Roll",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Kaju Pista Roll.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Ragi-Laddu",
+    "name": "Ragi Laddu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/ragi-laddu.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Dry-fruit-Laddu",
+    "name": "Dry fruit Laddu",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Dry fruit Laddu.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Coconut-Sweet",
+    "name": "Coconut Sweet",
+    "price": 7.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Kobari-Louse.jpg",
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   }
 ]

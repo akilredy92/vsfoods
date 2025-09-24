@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProducts } from "../api/client";
+import { listProducts } from "../api/client";
 import ProductCard from "../components/ProductCard";
 
 export default function Products() {
@@ -8,12 +8,18 @@ export default function Products() {
   const [cat, setCat] = useState("All");
 
   useEffect(() => {
-    getProducts().then(setItems).catch(console.error);
+    async function load() {
+      const products = await listProducts();
+      setItems(products);
+    }
+    load();
   }, []);
 
   const cats = ["All", ...Array.from(new Set(items.map(i => i.category)))];
   const filtered = items.filter(
-    i => (cat === "All" || i.category === cat) && i.name.toLowerCase().includes(q.toLowerCase())
+    i =>
+      (cat === "All" || i.category === cat) &&
+      i.name.toLowerCase().includes(q.toLowerCase())
   );
 
   return (
@@ -23,17 +29,31 @@ export default function Products() {
           placeholder="Search products..."
           value={q}
           onChange={e => setQ(e.target.value)}
-          style={{ padding: "0.6rem 0.8rem", borderRadius: 10, border: "1px solid #ddd", width: "60%" }}
+          style={{
+            padding: "0.6rem 0.8rem",
+            borderRadius: 10,
+            border: "1px solid #ddd",
+            width: "60%"
+          }}
         />
-        <select value={cat} onChange={e => setCat(e.target.value)} className="btn">
-          {cats.map(c => <option key={c} value={c}>{c}</option>)}
+        <select
+          value={cat}
+          onChange={e => setCat(e.target.value)}
+          className="btn"
+        >
+          {cats.map(c => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
         </select>
       </div>
 
       <div className="grid grid-4">
-        {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+        {filtered.map(p => (
+          <ProductCard key={p.id} product={p} />
+        ))}
       </div>
     </div>
   );
 }
-
