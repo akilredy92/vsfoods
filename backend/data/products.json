@@ -2,7 +2,7 @@
   {
     "id": "Classic-Mango-Pickle",
     "name": "Classic Mango Pickle",
-    "price": 7.99,
+    "price": 16.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -15,7 +15,7 @@
   {
     "id": "Masala-Peanuts",
     "name": "Masala Peanuts",
-    "price": 4.5,
+    "price": 14.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -28,7 +28,7 @@
   {
     "id": "Ghee-Mysore-Pak",
     "name": "Ghee Mysore Pak",
-    "price": 9.25,
+    "price": 19.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -41,7 +41,7 @@
   {
     "id": "Motichoor-Ladoo",
     "name": "Motichoor Ladoo",
-    "price": 5.75,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -54,7 +54,7 @@
   {
     "id": "Kaju-Katli",
     "name": "Kaju Katli",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -65,21 +65,9 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Badam-Burfi",
-    "name": "Badam Burfi",
-    "price": 7.99,
-    "unit": "lb",
-    "currency": "USD",
-    "category": "Sweets",
-    "rating": 4.7,
-    "stock": 120,
-    "image": "/images/badam-burfi.jpg",
-    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
-  },
-  {
     "id": "Spicy-Mixture",
     "name": "Spicy Mixture",
-    "price": 7.99,
+    "price": 18.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -90,21 +78,9 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
-    "id": "Chilli-Murukku",
-    "name": "Chilli Murukku",
-    "price": 7.99,
-    "unit": "lb",
-    "currency": "USD",
-    "category": "Snacks",
-    "isVeg": true,
-    "rating": 4.7,
-    "stock": 120,
-    "image": "/images/murukku.jpg"
-  },
-  {
     "id": "Kaarapusa",
     "name": "Kaarapusa",
-    "price": 7.99,
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -114,9 +90,33 @@
     "image": "/images/Kaarapusa.jpg"
   },
   {
+    "id": "Paalakova",
+    "name": "Paalakova",
+    "price": 17.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/paalakova.jpg"
+  },
+  {
+    "id": "Kaarachi-Halwa",
+    "name": "Kaarachi Halwa",
+    "price": 18.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Sweets",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Karachi Halwa.jpg"
+  },
+  {
     "id": "Chekkalu",
     "name": "Chekkalu",
-    "price": 7.99,
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -128,7 +128,7 @@
   {
     "id": "Kaara-Boondi",
     "name": "Kaara Boondi",
-    "price": 7.99,
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -140,7 +140,7 @@
   {
     "id": "Dalmudi-Mixture",
     "name": "Dalmudi Mixture",
-    "price": 7.99,
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -152,7 +152,7 @@
   {
     "id": "Chakodi",
     "name": "Chakodi",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -164,7 +164,7 @@
   {
     "id": "Aaku-Pakodi",
     "name": "Aaku Pakodi",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -176,7 +176,7 @@
   {
     "id": "Chakli",
     "name": "Chakli",
-    "price": 7.99,
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
@@ -186,74 +186,22 @@
     "image": "/images/Chakli.jpg"
   },
   {
-    "id": "Karasev",
-    "name": "Karasev",
-    "price": 7.99,
+    "id": "Raagi-Chekkalu",
+    "name": "Raagi Chekkalu",
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Snacks",
     "isVeg": true,
     "rating": 4.7,
     "stock": 120,
-    "image": "/images/kara-sev.jpg",
-    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+    "image": "/images/Raagi chakralu.jpg"
   },
-  {
-    "id": "Onion-Pakoda",
-    "name": "Onion Pakoda",
-    "price": 7.99,
-    "unit": "lb",
-    "currency": "USD",
-    "category": "Evening Snacks",
-    "isVeg": true,
-    "rating": 4.7,
-    "stock": 120,
-    "image": "/images/Onion-Pakora.jpg",
-    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
-  },
-  {
-    "id": "Samosa",
-    "name": "Samosa (2pc)",
-    "price": 7.99,
-    "unit": "lb",
-    "currency": "USD",
-    "category": "Evening Snacks",
-    "isVeg": true,
-    "rating": 4.7,
-    "stock": 120,
-    "image": "/images/samosa.jpg",
-    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
-  },
-  {
-    "id": "Vada",
-    "name": "Vada (2pc)",
-    "price": 7.99,
-    "unit": "lb",
-    "currency": "USD",
-    "category": "Evening Snacks",
-    "isVeg": true,
-    "rating": 4.7,
-    "stock": 120,
-    "image": "/images/Medu-Vada.jpg",
-    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
-  },
-  {
-    "id": "Samosa-Chaat",
-    "name": "Samosa Chaat",
-    "price": 7.99,
-    "unit": "lb",
-    "currency": "USD",
-    "category": "Evening Snacks",
-    "isVeg": true,
-    "rating": 4.7,
-    "stock": 120,
-    "image": "/images/samosa-chaat.jpg",
-    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
-  },
+
   {
     "id": "Lemon-Pickle",
     "name": "Lemon Pickle",
-    "price": 7.99,
+    "price": 16.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -266,7 +214,7 @@
   {
     "id": "Gongura-Pickle",
     "name": "Gongura Pickle",
-    "price": 7.99,
+    "price": 16.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -279,7 +227,7 @@
   {
     "id": "Tomato-Pickle",
     "name": "Tomato Pickle",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -290,9 +238,35 @@
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
+    "id": "Ginger-Pickle",
+    "name": "Tomato Pickle",
+    "price": 16.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Pickles",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/allam-pachadi.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
+    "id": "Karella(Kakarkaya)-Pickle",
+    "name": "Tomato Pickle",
+    "price": 15.99,
+    "unit": "lb",
+    "currency": "USD",
+    "category": "Pickles",
+    "isVeg": true,
+    "rating": 4.7,
+    "stock": 120,
+    "image": "/images/Kakarkaya pickle.jpg",
+    "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
+  },
+  {
     "id": "Chicken-Pickle",
     "name": "Chicken Pickle",
-    "price": 12.99,
+    "price": 20.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -304,7 +278,7 @@
   {
     "id": "Chicken-Pickle-Boneless",
     "name": "Chicken Pickle Boneless",
-    "price": 12.99,
+    "price": 21.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -316,7 +290,7 @@
   {
     "id": "Mutton-Pickle",
     "name": "Mutton Pickle",
-    "price": 7.99,
+    "price": 26.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -328,7 +302,7 @@
   {
     "id": "Fish-Pickle",
     "name": "Fish Pickle",
-    "price": 7.99,
+    "price": 26.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Pickles",
@@ -340,7 +314,7 @@
   {
     "id": "Boondi-laddu",
     "name": "Boondi laddu",
-    "price": 7.99,
+    "price": 14.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -352,7 +326,7 @@
   {
     "id": "Ravva-Laddu",
     "name": "Ravva Laddu",
-    "price": 7.99,
+    "price": 14.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -364,19 +338,19 @@
   {
     "id": "Sunnundalu",
     "name": "Sunnundalu",
-    "price": 7.99,
+    "price": 17.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
     "rating": 4.7,
     "stock": 120,
-    "image": "/images/Sunnunda.jpg",
+    "image": "/images/sunnunda.jpg",
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
     "id": "Bellam-Gavvalu",
     "name": "Bellam Gavvalu",
-    "price": 7.99,
+    "price": 16.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -388,7 +362,7 @@
   {
     "id": "Arisalu",
     "name": "Arisalu",
-    "price": 7.99,
+    "price": 19.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -400,7 +374,7 @@
   {
     "id": "Palli-Patti",
     "name": "Palli Patti",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -412,7 +386,7 @@
   {
     "id": "Baadusha",
     "name": "Baadusha",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -424,7 +398,7 @@
   {
     "id": "Kakinada-Kaaja",
     "name": "Kakinada Kaaja",
-    "price": 7.99,
+    "price": 16.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -436,7 +410,7 @@
   {
     "id": "Kaju-Pista-Roll",
     "name": "Kaju Pista Roll",
-    "price": 7.99,
+    "price": 19.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -448,19 +422,19 @@
   {
     "id": "Ragi-Laddu",
     "name": "Ragi Laddu",
-    "price": 7.99,
+    "price": 16.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
     "rating": 4.7,
     "stock": 120,
-    "image": "/images/ragi-laddu.jpg",
+    "image": "/images/raagi laddu.jpg",
     "description": "Tangy, spicy mango pickle made in small batches with cold-pressed oil."
   },
   {
     "id": "Dry-fruit-Laddu",
     "name": "Dry fruit Laddu",
-    "price": 7.99,
+    "price": 19.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",
@@ -472,7 +446,7 @@
   {
     "id": "Coconut-Sweet",
     "name": "Coconut Sweet",
-    "price": 7.99,
+    "price": 15.99,
     "unit": "lb",
     "currency": "USD",
     "category": "Sweets",

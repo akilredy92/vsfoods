@@ -5,7 +5,11 @@ export default function Payment() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Payment submitted using ${method}`);
+    if (method === "zelle") {
+      alert("Please complete your payment using Zelle: Send to vsfoods@gmail.com or (555) 123-4567");
+    } else {
+      alert(`Payment submitted using ${method}`);
+    }
   };
 
   return (
@@ -16,29 +20,6 @@ export default function Payment() {
         className="card"
         style={{ padding: "1.5rem", display: "grid", gap: "1rem" }}
       >
-        {/* Credit / Debit Card */}
-        <label>
-          <input
-            type="radio"
-            name="payment"
-            value="card"
-            checked={method === "card"}
-            onChange={(e) => setMethod(e.target.value)}
-          />{" "}
-          Credit / Debit Card
-        </label>
-
-        {/* UPI */}
-        <label>
-          <input
-            type="radio"
-            name="payment"
-            value="upi"
-            checked={method === "upi"}
-            onChange={(e) => setMethod(e.target.value)}
-          />{" "}
-          UPI (Google Pay / PhonePe / Paytm)
-        </label>
 
         {/* Zelle */}
         <label>
@@ -50,6 +31,35 @@ export default function Payment() {
             onChange={(e) => setMethod(e.target.value)}
           />{" "}
           Zelle (US Bank Transfer)
+        </label>
+
+        {/* Show Zelle Instructions */}
+        {method === "zelle" && (
+          <div style={{ padding: "0.8rem", background: "#fef9c3", borderRadius: "8px" }}>
+            <strong>Zelle Instructions:</strong>
+            <p style={{ margin: "0.5rem 0" }}>
+              Please send your payment to:
+            </p>
+            <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
+              <li>Email: <b>vsfoods@gmail.com</b></li>
+              <li>Phone: <b>(555) 123-4567</b></li>
+            </ul>
+            <p style={{ fontSize: "0.9rem", marginTop: "0.5rem", color: "#6b7280" }}>
+              ⚠️ Make sure to include your Order ID in the note while sending payment.
+            </p>
+          </div>
+        )}
+
+        {/* COD */}
+        <label>
+          <input
+            type="radio"
+            name="payment"
+            value="cod"
+            checked={method === "cod"}
+            onChange={(e) => setMethod(e.target.value)}
+          />{" "}
+          Cash on Delivery
         </label>
 
         <button className="btn primary" style={{ marginTop: "1rem" }}>

@@ -370,3 +370,71 @@ label { font-size: .92rem; color: #374151; }
     font-size: 20px;
   }
 }
+/* Horizontal section scroller */
+.hwrap {
+  position: relative;
+}
+
+.hrow {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 1fr);
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  padding: .25rem .5rem; /* a little breathing room so cards aren’t at edges */
+}
+.hrow::-webkit-scrollbar { height: 10px; }
+.hrow::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 999px; }
+.hrow::-webkit-scrollbar-track { background: transparent; }
+
+.hcell { min-width: 240px; } /* card width target; adjust if needed */
+
+/* Chevron buttons */
+.chev {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 40px;
+  width: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #111827;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 3;
+}
+.chev.left { left: -8px; }
+.chev.right { right: -8px; }
+.chev.show { opacity: 1; pointer-events: auto; }
+.chev:active { transform: translateY(-50%) scale(0.98); }
+
+/* Edge fades (nice visual cue) */
+.fade {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.fade.left  { left: 0;  background: linear-gradient(to right, rgba(255,255,255,.9), rgba(255,255,255,0)); }
+.fade.right { right: 0; background: linear-gradient(to left,  rgba(255,255,255,.9), rgba(255,255,255,0)); }
+.fade.show { opacity: 1; }
+
+/* Make arrows/fades sit nicely on busy background */
+@media (prefers-color-scheme: dark) {
+  .chev { background: #fff; color:#111827; }
+}
+@media (max-width: 768px) {
+  .hrow { gap: 10px; }
+  .hcell { min-width: 210px; }
+}

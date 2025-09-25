@@ -1,170 +1,166 @@
-// src/pages/Cart.jsx
 import React, { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../store/cartContext.jsx";
+import { useCart } from "../store/cartContext";
 
-/** Pull an array of cart lines out of any common cart context shape */
-function useCartLines() {
+/* ---------- helpers (identical approach as Checkout) ---------- */
+function tryCall(fn, ...args) {
   try {
-    const ctx = useCart();
-
-    // Prefer explicit arrays
-    if (Array.isArray(ctx?.items)) return [ctx, ctx.items];
-    if (Array.isArray(ctx?.cart)) return [ctx, ctx.cart];
-
-    // Redux-like state
-    if (Array.isArray(ctx?.state?.items)) return [ctx, ctx.state.items];
-    if (Array.isArray(ctx?.state?.cart)) return [ctx, ctx.state.cart];
-
-    // Nothing yet (e.g., during hot-reload) → empty
-    return [ctx, []];
-  } catch {
-    // Provider not mounted yet → empty
-    return [undefined, []];
-  }
+    if (typeof fn === "function") {
+      fn(...args);
+      return true;
+    }
+  } catch {}
+  return false;
 }
-
-/** Get a numeric count for the navbar badge etc. */
-function linesCount(lines) {
-  return lines.reduce((n, line) => n + (Number(line?.qty ?? line?.quantity ?? 1) || 0), 0);
+function keyOf(item) {
+  return item?.id ?? item?.slug ?? item?.name ?? String(item?.sku ?? "");
 }
-
-/** Get per-line info regardless of field names */
-function normalizeLine(line) {
-  const product = line.product ?? line.item ?? line;
-  const qty = Number(line.qty ?? line.quantity ?? 1) || 1;
-  const price = Number(product?.price ?? line.price ?? 0) || 0;
-
-  return {
-    id: product?.id ?? product?.slug ?? product?.name ?? line.id,
-    name: product?.name ?? line.name ?? "Item",
-    image: product?.image ?? line.image,
-    unit: product?.unit ?? "lb",
-    price,
-    qty,
-    product,
-    raw: line,
-    total: price * qty,
-  };
+function qtyOf(item) {
+  return Number(item?.quantity ?? item?.qty ?? item?.count ?? 1);
 }
 
 export default function Cart() {
   const navigate = useNavigate();
-  const [ctx, rawLines] = useCartLines();
 
-  const lines = useMemo(() => rawLines.map(normalizeLine), [rawLines]);
+  let cartCtx = {};
+  try { cartCtx = useCart(); } catch {}
+  const cart = Array.isArray(cartCtx?.cart) ? cartCtx.cart : [];
 
-  const subtotal = useMemo(
-    () => lines.reduce((s, l) => s + l.total, 0),
-    [lines]
-  );
+  const updateQty   = cartCtx?.updateQty;
+  const increment   = cartCtx?.increment;
+  const decrement   = cartCtx?.decrement;
+  const add         = cartCtx?.add;
+  const addItem     = cartCtx?.addItem;
+  const removeItem  = cartCtx?.removeItem;
+  const remove      = cartCtx?.remove;
+  const dispatch    = cartCtx?.dispatch;
+  const clearCart   = cartCtx?.clearCart || (() => {});
 
-  // --- Cart API adapters (work across different context implementations) ---
-  const setQty = (line, nextQty) => {
-    if (!ctx) return;
+  function setQty(item, nextQty) {
+    const target = Math.max(1, Math.min(99, Number(nextQty) || 1));
+    const k = keyOf(item);
 
-    // common APIs first
-    if (typeof ctx.updateQty === "function") return ctx.updateQty(line.product, nextQty);
-    if (typeof ctx.setQty === "function") return ctx.setQty(line.product, nextQty);
-    if (typeof ctx.addToCart === "function") return ctx.addToCart(line.product, nextQty); // some libs overwrite
-    if (typeof ctx.addItem === "function") return ctx.addItem(line.product, nextQty);
+    if (tryCall(updateQty, k, target)) return;
+    if (tryCall(updateQty, item, target)) return;
 
-    // reducer-style
-    if (typeof ctx.dispatch === "function") {
-      return ctx.dispatch({ type: "SET_QTY", payload: { product: line.product, qty: nextQty } });
+    const current = qtyOf(item);
+
+    if (target > current) {
+      const incCount = target - current;
+      for (let i = 0; i < incCount; i++) {
+        if (tryCall(increment, k)) continue;
+        if (tryCall(increment, item)) continue;
+        if (tryCall(addItem, item, 1)) continue;
+        if (tryCall(add, item, 1)) continue;
+        if (tryCall(dispatch, { type: "INCREMENT", payload: k })) continue;
+        if (tryCall(dispatch, { type: "ADD", payload: { product: item, qty: 1 } })) continue;
+      }
+      return;
     }
-  };
-
-  const removeLine = (line) => {
-    if (!ctx) return;
-
-    if (typeof ctx.removeFromCart === "function") return ctx.removeFromCart(line.product);
-    if (typeof ctx.removeItem === "function") return ctx.removeItem(line.product);
-
-    if (typeof ctx.dispatch === "function") {
-      return ctx.dispatch({ type: "REMOVE", payload: { product: line.product } });
+    if (target < current) {
+      const decCount = current - target;
+      for (let i = 0; i < decCount; i++) {
+        if (tryCall(decrement, k)) continue;
+        if (tryCall(decrement, item)) continue;
+        if (tryCall(dispatch, { type: "DECREMENT", payload: k })) continue;
+        if (tryCall(dispatch, { type: "REMOVE_ONE", payload: k })) continue;
+      }
+      return;
     }
-  };
+  }
+  const inc = (item) => setQty(item, qtyOf(item) + 1);
+  const dec = (item) => qtyOf(item) > 1 && setQty(item, qtyOf(item) - 1);
 
-  const clearCart = () => {
-    if (!ctx) return;
-
-    if (typeof ctx.clearCart === "function") return ctx.clearCart();
-    if (typeof ctx.dispatch === "function") return ctx.dispatch({ type: "CLEAR" });
-  };
-
-  // --- UI ---
-
-  if (lines.length === 0) {
-    return (
-      <div className="container" style={{ padding: "2rem 1rem" }}>
-        <h2>Your Cart</h2>
-        <p className="muted">Your cart is empty.</p>
-        <Link className="btn primary" to="/products">Browse products</Link>
-      </div>
-    );
+  function removeLine(item) {
+    const k = keyOf(item);
+    if (tryCall(removeItem, k)) return;
+    if (tryCall(removeItem, item)) return;
+    if (tryCall(remove, k)) return;
+    if (tryCall(remove, item)) return;
+    if (tryCall(dispatch, { type: "REMOVE", payload: k })) return;
+    if (tryCall(updateQty, k, 0)) return;
+    tryCall(updateQty, item, 0);
   }
 
+  const subtotal = useMemo(
+    () => cart.reduce((n, it) => n + (Number(it.price) || 0) * qtyOf(it), 0),
+    [cart]
+  );
+
   return (
-    <div className="container" style={{ padding: "1.5rem 1rem 2.5rem" }}>
-      <h2 style={{ marginBottom: "1rem" }}>Your Cart</h2>
+    <div className="container" style={{ maxWidth: 980, margin: "0 auto", paddingBottom: "2rem" }}>
+      <div className="card" style={{ padding: "1.2rem", borderRadius: 16 }}>
+        <h2 style={{ margin: 0 }}>Your Cart</h2>
 
-      <div className="card" style={{ padding: "1rem" }}>
-        {lines.map((l) => (
-          <div
-            key={l.id}
-            className="row"
-            style={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 12,
-              padding: ".6rem 0",
-              borderBottom: "1px solid #eee",
-            }}
-          >
-            <div className="row" style={{ alignItems: "center", gap: 12 }}>
-              {l.image && (
-                <img
-                  src={l.image}
-                  alt={l.name}
-                  style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 8 }}
-                />
-              )}
-              <div>
-                <div style={{ fontWeight: 600 }}>{l.name}</div>
-                <div className="muted">${l.price.toFixed(2)} / {l.unit}</div>
-              </div>
-            </div>
-
-            <div className="row" style={{ gap: 10, alignItems: "center" }}>
-              <div className="qty">
-                <button onClick={() => setQty(l, Math.max(1, l.qty - 1))} aria-label="Decrease">−</button>
-                <input readOnly value={l.qty} />
-                <button onClick={() => setQty(l, Math.min(99, l.qty + 1))} aria-label="Increase">+</button>
-              </div>
-
-              <div style={{ width: 88, textAlign: "right", fontWeight: 700 }}>
-                ${l.total.toFixed(2)}
-              </div>
-
-              <button className="btn" onClick={() => removeLine(l)} aria-label={`Remove ${l.name}`}>
-                Remove
-              </button>
-            </div>
+        {cart.length === 0 ? (
+          <div style={{ marginTop: 12 }}>
+            <p className="muted">Your cart is empty.</p>
+            <Link className="btn" to="/products">Browse products</Link>
           </div>
-        ))}
+        ) : (
+          <>
+            <div style={{ marginTop: 12 }}>
+              {cart.map((item) => {
+                const q = qtyOf(item);
+                const lineTotal = (Number(item.price) || 0) * q;
+                return (
+                  <div
+                    key={keyOf(item)}
+                    className="row"
+                    style={{
+                      alignItems: "center",
+                      gap: 12,
+                      padding: "10px 0",
+                      borderBottom: "1px solid #eee",
+                    }}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      style={{ width: 64, height: 64, borderRadius: 10, objectFit: "cover" }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 700 }}>{item.name}</div>
+                      <div className="muted">
+                        ${Number(item.price).toFixed(2)} / {item.unit || "lb"}
+                      </div>
+                    </div>
 
-        <div className="row" style={{ justifyContent: "space-between", paddingTop: "1rem" }}>
-          <div className="muted">Items: {linesCount(lines)}</div>
-          <div style={{ fontWeight: 800, fontSize: 18 }}>Subtotal: ${subtotal.toFixed(2)}</div>
-        </div>
+                    <div className="qty">
+                      <button onClick={() => dec(item)} disabled={q <= 1}>−</button>
+                      <input readOnly value={q} />
+                      <button onClick={() => inc(item)}>+</button>
+                    </div>
 
-        <div className="row" style={{ gap: 12, marginTop: 12, justifyContent: "flex-end" }}>
-          <button className="btn" onClick={clearCart}>Clear cart</button>
-          <button className="btn primary" onClick={() => navigate("/checkout")}>
-            Checkout
-          </button>
-        </div>
+                    <div style={{ fontWeight: 700, minWidth: 90, textAlign: "right" }}>
+                      ${lineTotal.toFixed(2)}
+                    </div>
+
+                    <button className="btn ghost" onClick={() => removeLine(item)}>
+                      Remove
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="card" style={{ marginTop: 12, padding: "1rem", borderRadius: 12 }}>
+              <div className="row" style={{ justifyContent: "space-between" }}>
+                <span className="muted">Subtotal</span>
+                <strong>${subtotal.toFixed(2)}</strong>
+              </div>
+              <div className="hint" style={{ marginTop: 6 }}>
+                Shipping is calculated on the Checkout page after you enter a ZIP code.
+              </div>
+              <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
+                <Link className="btn primary" to="/checkout">Checkout</Link>
+                <button className="btn ghost" type="button" onClick={() => (confirm("Clear the cart?") && clearCart())}>
+                  Clear cart
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -7,57 +7,54 @@ import SectionNav from "../components/SectionNav";
 
 // Placeholder items you can replace later (images live in /public/images)
 const sweets = [
-  { id: "Ghee Mysore Pak", name: "Ghee Mysore Pak", price: 9.25, image: "/images/gheemysorepak.jpg" },
-  { id: "Motichoor Ladoo", name: "Motichoor Ladoo", price: 8.50, image: "/images/Motichoor-laddoo.jpg" },
-  { id: "Kaju Katli", name: "Kaju Katli",     price: 11.00, image: "/images/Kaju-Katli.jpg" },
-  { id: "Boondi laddu", name: "Boondi laddu",    price: 10.50, image: "/images/badam-burfi.jpg" },
-  { id: "Ravva Laddu", name: "Ravva Laddu",    price: 10.50, image: "/images/Boondi-Laddu.jpg" },
-  { id: "Sunnundalu", name: "Sunnundalu",    price: 10.50, image: "/images/sunnundalu.jpg" },
-  { id: "Bellam Gavvalu", name: "Bellam Gavvalu",    price: 10.50, image: "/images/Bellam Gavvalu.jpg" },
-  { id: "Arisalu", name: "Arisalu",    price: 10.50, image: "/images/Arisalu.jpg" },
-  { id: "Palli Patti", name: "Palli Patti",    price: 10.50, image: "/images/Palli Patti.jpg" },
-  { id: "Baadusha", name: "Baadusha",    price: 10.50, image: "/images/Baadusha.jpg" },
-  { id: "Kakinada Kaaja", name: "Kakinada Kaaja",    price: 10.50, image: "/images/Kakinada Kaaja.jpg" },
-  { id: "Kaju Pista Roll", name: "Kaju Pista Roll",    price: 10.50, image: "/images/Kaju Pista Roll.jpg" },
-  { id: "Ragi Laddu", name: "Ragi Laddu",    price: 10.50, image: "/images/Ragi Laddu.jpg" },
-  { id: "Dry fruit Laddu", name: "Dry fruit Laddu",    price: 10.50, image: "/images/Dry fruit Laddu.jpg" },
-  { id: "Coconut Sweet", name: "Coconut Sweet",    price: 10.50, image: "/images/Kobari-Louse.jpg" },
+  { id: "Ghee Mysore Pak", name: "Ghee Mysore Pak", price: 19.99, image: "/images/gheemysorepak.jpg" },
+  { id: "Motichoor Ladoo", name: "Motichoor Ladoo", price: 15.99, image: "/images/Motichoor-laddoo.jpg" },
+  { id: "Kaju Katli", name: "Kaju Katli",     price: 15.99, image: "/images/Kaju-Katli.jpg" },
+  { id: "Boondi laddu", name: "Boondi laddu",    price: 14.99, image: "/images/badam-burfi.jpg" },
+  { id: "Ravva Laddu", name: "Ravva Laddu",    price: 14.99, image: "/images/Boondi-Laddu.jpg" },
+  { id: "Sunnundalu", name: "Sunnundalu",    price: 17.99, image: "/images/sunnunda.jpg" },
+  { id: "Bellam Gavvalu", name: "Bellam Gavvalu",    price: 16.99, image: "/images/Bellam Gavvalu.jpg" },
+  { id: "Arisalu", name: "Arisalu",    price: 19.99, image: "/images/Arisalu.jpg" },
+  { id: "Palli Patti", name: "Palli Patti",    price: 15.99, image: "/images/Palli Patti.jpg" },
+  { id: "Baadusha", name: "Baadusha",    price: 15.99, image: "/images/Baadusha.jpg" },
+  { id: "Kakinada Kaaja", name: "Kakinada Kaaja",    price: 16.99, image: "/images/Kakinada Kaaja.jpg" },
+  { id: "Kaju Pista Roll", name: "Kaju Pista Roll",    price: 19.99, image: "/images/Kaju Pista Roll.jpg" },
+  { id: "Ragi Laddu", name: "Ragi Laddu",    price: 18.99, image: "/images/raagi laddu.jpg" },
+  { id: "Dry fruit Laddu", name: "Dry fruit Laddu",    price: 19.99, image: "/images/Dry fruit Laddu.jpg" },
+  { id: "Coconut Sweet", name: "Coconut Sweet",    price: 15.99, image: "/images/Kobari-Louse.jpg" },
+  { id: "KaarachiHalwa", name: "KaarachiHalwa",    price: 18.99, image: "/images/Karachi Halwa.jpg" },
+  { id: "Paalakova", name: "Paalakova",    price: 17.99, image: "/images/paalakova.jpg" },
 
 ];
 
 const hotOnes = [
-  { id: "Chilli Murukku", name: "Chilli Murukku", price: 5.75, image: "/images/murukku.jpg" },
-  { id: "Spicy Mixture", name: "Spicy Mixture",  price: 4.99, image: "/images/SpicyMixture.jpg" },
-  { id: "Masala Peanuts", name: "Masala Peanuts", price: 4.50, image: "/images/Masala-Peanuts.jpg" },
-  { id: "Karasev", name: "Karasev",        price: 5.25, image: "/images/kara-sev.jpg" },
-  { id: "Kaarapusa", name: "Kaarapusa",        price: 5.25, image: "/images/Kaarapusa.jpg" },
-  { id: "Chekkalu", name: "Chekkalu",        price: 5.25, image: "/images/Chekkalu.jpg" },
-  { id: "Kaara Boondi", name: "Kaara Boondi",        price: 5.25, image: "/images/kara-boondi.jpg" },
-  { id: "Dalmudi Mixture", name: "Dalmudi Mixture",        price: 5.25, image: "/images/Dalmudi Mixture.jpg" },
-  { id: "Chakodi", name: "Chakodi",        price: 5.25, image: "/images/chakodi.jpg" },
-  { id: "Aaku Pakodi", name: "Aaku Pakodi",        price: 5.25, image: "/images/Aakupakodi.jpg" },
-  { id: "Chakli", name: "Chakli",        price: 5.25, image: "/images/Chakli.jpg" },
-];
-
-const eveningSnacks = [
-  { id: "Onion Pakoda", name: "Onion Pakoda",   price: 4.75, image: "/images/Onion-Pakora.jpg" },
-  { id: "Samosa (2pc)", name: "Samosa (2pc)",   price: 5.50, image: "/images/samosa.jpg" },
-  { id: "Vada (2pc)", name: "Vada (2pc)",     price: 5.75, image: "/images/Medu-Vada.jpg" },
-  { id: "Samosa Chaat", name: "Samosa Chaat",   price: 6.99, image: "/images/samosa-chaat.jpg" },
+  { id: "Spicy Mixture", name: "Spicy Mixture",  price: 18.99, image: "/images/SpicyMixture.jpg" },
+  { id: "Masala Peanuts", name: "Masala Peanuts", price: 14.99, image: "/images/Masala-Peanuts.jpg" },
+  { id: "Chakralu", name: "Chakralu",        price: 17.99, image: "/images/Janthikalu-Chakralu.jpg" },
+  { id: "Kaarapusa", name: "Kaarapusa",        price: 17.99, image: "/images/Kaarapusa.jpg" },
+  { id: "Chekkalu", name: "Chekkalu",        price: 17.99, image: "/images/Chekkalu.jpg" },
+  { id: "Raagi Chekkalu", name: "Raagi Chekkalu",        price: 17.99, image: "/images/Raagi chakralu.jpg" },
+  { id: "Kaara Boondi", name: "Kaara Boondi",        price: 17.99, image: "/images/kara-boondi.jpg" },
+  { id: "Dalmudi Mixture", name: "Dalmudi Mixture",        price: 17.99, image: "/images/Dalmudi Mixture.jpg" },
+  { id: "Chakodi", name: "Chakodi",        price: 15.99, image: "/images/chakodi.jpg" },
+  { id: "Aaku Pakodi", name: "Aaku Pakodi",        price: 15.99, image: "/images/Aakupakodi.jpg" },
+  { id: "Chakli", name: "Chakli",        price: 17.99, image: "/images/Chakli.jpg" },
 ];
 
 const picklesVeg = [
-  { id: "Classic Mango Pickle", name: "Mango Pickle",   price: 7.99, image: "/images/mango-pickle.jpg" },
-  { id: "Lemon Pickle", name: "Lemon Pickle",   price: 6.99, image: "/images/lemon-pickle.jpg" },
-  { id: "Gongura Pickle", name: "Gongura Pickle", price: 8.50, image: "/images/gongura_pickle.jpg" },
-  { id: "Tomato Pickle", name: "Tomato Pickle",  price: 7.25, image: "/images/tomato-pickle.jpg" },
+  { id: "Classic Mango Pickle", name: "Mango Pickle",   price: 16.99, image: "/images/mango-pickle.jpg" },
+  { id: "Lemon Pickle", name: "Lemon Pickle",   price: 16.99, image: "/images/lemon-pickle.jpg" },
+  { id: "Gongura Pickle", name: "Gongura Pickle", price: 16.99, image: "/images/gongura_pickle.jpg" },
+  { id: "Ginger Pickle", name: "Ginger Pickle", price: 16.99, image: "/images/allam-pachadi.jpg" },
+  { id: "Tomato Pickle", name: "Tomato Pickle",  price: 15.99, image: "/images/tomato-pickle.jpg" },
+  { id: "Karella(Kakarkaya) Pickle", name: "Kakarkaya Pickle", price: 15.99, image: "/images/Kakarkaya pickle.jpg" },
 ];
 
 const picklesNonVeg = [
-  { id: "Chicken Pickle", name: "Chicken Pickle",     price: 12.99, image: "/images/chicken-pickle-with-bone.jpg" },
-  { id: "Chicken Pickle Boneless", name: "Chicken Pickle Boneless",   price: 11.99, image: "/images/chicken-pickle-without-bone.jpg" },
-  { id: "Mutton Pickle", name: "Mutton Pickle",    price: 13.99, image: "/images/mutton-pickle.jpg" },
-  { id: "Fish Pickle", name: "Fish Pickle",      price: 13.50, image: "/images/fish-pickle.jpg" },
+  { id: "Chicken Pickle", name: "Chicken Pickle",     price: 20.99, image: "/images/chicken-pickle-with-bone.jpg" },
+  { id: "Chicken Pickle Boneless", name: "Chicken Pickle Boneless",   price: 21.99, image: "/images/chicken-pickle-without-bone.jpg" },
+  { id: "Mutton Pickle", name: "Mutton Pickle",    price: 26.99, image: "/images/mutton-pickle.jpg" },
+  { id: "Fish Pickle", name: "Fish Pickle",      price: 26.99, image: "/images/fish-pickle.jpg" },
 ];
 
 export default function Home() {
@@ -77,7 +74,6 @@ export default function Home() {
       {/* Sections that appear as you scroll */}
       <Section id="sweets" title="Sweets" items={sweets} />
       <Section id="hot" title="Hot Ones" items={hotOnes} />
-      <Section id="evening" title="Evening Snacks" items={eveningSnacks} />
       <Section id="pickles-veg" title="Pickles — Veg" items={picklesVeg} />
       <Section id="pickles-nonveg" title="Pickles — Non-Veg" items={picklesNonVeg} />
 

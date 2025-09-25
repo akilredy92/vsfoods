@@ -1,103 +1,88 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import ProductCard from "./ProductCard"; // uses your existing card component
 
-function Card({ item }) {
-  const slug = item.slug || item.id;
+export default function Section({ id, title, items = [] }) {
+  const scrollerRef = useRef(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const updateArrows = useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanLeft(scrollLeft > 4);
+    setCanRight(scrollLeft + clientWidth < scrollWidth - 4);
+  }, []);
+
+  const scrollByAmount = (dir) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const amount = Math.max(320, Math.floor(el.clientWidth * 0.9)); // almost a “page”
+    el.scrollBy({ left: dir * amount, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    updateArrows();
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const onScroll = () => updateArrows();
+    el.addEventListener("scroll", onScroll, { passive: true });
+
+    // Resize observer to recalc when layout changes
+    const ro = new ResizeObserver(updateArrows);
+    ro.observe(el);
+
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      ro.disconnect();
+    };
+  }, [updateArrows]);
+
   return (
-    <div
-      className="product-card"
-      style={{
-        width: 248,                 // ⬆️ slightly bigger
-        borderRadius: 16,
-        overflow: "hidden",
-        background: "#fff",
-        border: "1px solid #eee",
-        boxShadow: "0 2px 10px rgba(0,0,0,.06)",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {item.image && (
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{ width: "100%", height: 180, objectFit: "cover" }} // ⬆️ taller image
-        />
-      )}
-
-      <div style={{ padding: "10px 14px 0 14px", flex: 1 }}>
-        <h3 style={{ margin: 0, fontSize: "1.06rem", lineHeight: 1.25 }}>
-          {item.name}
-        </h3>
-
-        {/* ❌ Removed the category/subtitle line entirely */}
+    <section id={id} style={{ margin: "1.5rem 0" }}>
+      <div className="row" style={{ justifyContent: "space-between", marginBottom: 8 }}>
+        <h2>{title}</h2>
+        {/* optional: link to full listing
+        <a className="muted" href={`/products?cat=${encodeURIComponent(title)}`}>View all →</a>
+        */}
       </div>
 
-      {/* price + view (tighter, not at the edges) */}
-      <div
-        style={{
-          padding: "10px 14px 12px 14px",   // ⬇️ tighter than before
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderTop: "1px solid #eee",
-          marginTop: 8,
-        }}
-      >
-        <div style={{ fontWeight: 700, fontSize: "1rem" }}>
-          ${Number(item.price).toFixed(2)}
-        </div>
-        <Link
-          to={`/products/${encodeURIComponent(slug)}`}
-          className="btn"
-          style={{
-            padding: ".45rem .9rem",
-            borderRadius: 10,
-            border: "1px solid #ddd",
-            fontWeight: 600,
-          }}
+      <div className="hwrap">
+        {/* Left chevron */}
+        <button
+          className={`chev left ${canLeft ? "show" : ""}`}
+          aria-label="Scroll left"
+          onClick={() => scrollByAmount(-1)}
         >
-          View
-        </Link>
-      </div>
-    </div>
-  );
-}
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor" />
+          </svg>
+        </button>
 
-export default function Section({ id, title, items }) {
-  return (
-    <section id={id} style={{ marginTop: "1.6rem" }}>
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-          marginBottom: 10,
-        }}
-      >
-        <h2 style={{ margin: 0 }}>{title}</h2>
-        <Link to="/products" className="muted" style={{ textDecoration: "underline" }}>
-          View all
-        </Link>
-      </div>
+        {/* Scroll area */}
+        <div ref={scrollerRef} className="hrow" role="region" aria-label={`${title} products`}>
+          {items.map((p) => (
+            <div className="hcell" key={p.id || p.slug || p.name}>
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
 
-      {/* horizontal scroller */}
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          gap: 14,
-          overflowX: "auto",
-          paddingBottom: 8,
-          scrollSnapType: "x proximity",
-        }}
-      >
-        {items.map((it) => (
-          <div key={it.id} style={{ scrollSnapAlign: "start" }}>
-            <Card item={it} />
-          </div>
-        ))}
+        {/* Right chevron */}
+        <button
+          className={`chev right ${canRight ? "show" : ""}`}
+          aria-label="Scroll right"
+          onClick={() => scrollByAmount(1)}
+        >
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor" />
+          </svg>
+        </button>
+
+        {/* Edge fades */}
+        <div className={`fade left ${canLeft ? "show" : ""}`} aria-hidden="true" />
+        <div className={`fade right ${canRight ? "show" : ""}`} aria-hidden="true" />
       </div>
     </section>
   );
