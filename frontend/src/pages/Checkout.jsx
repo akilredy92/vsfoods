@@ -1,10 +1,15 @@
-// src/pages/Checkout.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../store/userContext";
 import { useCart } from "../store/cartContext";
 
-/* -------- helpers -------- */
+/* ---------------- helpers ---------------- */
+function keyOf(item) {
+  return item?.id ?? item?.slug ?? item?.name ?? String(item?.sku ?? "");
+}
+function qtyOf(item) {
+  return Number(item?.quantity ?? item?.qty ?? item?.count ?? 1);
+}
 function tryCall(fn, ...args) {
   try {
     if (typeof fn === "function") {
@@ -14,15 +19,34 @@ function tryCall(fn, ...args) {
   } catch {}
   return false;
 }
-function keyOf(item) {
-  return item?.id ?? item?.slug ?? item?.name ?? String(item?.sku ?? "");
+
+/* -------- shipping calculator (simple & self-contained) -------- */
+function weightOf(item) {
+  // assume price per pound items are 1 lb each by qty
+  if ((item.unit || "").toLowerCase() === "lb") return qtyOf(item);
+  // otherwise use optional item.weight or 0.5 lb fallback
+  return qtyOf(item) * (Number(item.weight) || 0.5);
 }
-function qtyOf(item) {
-  return Number(item?.quantity ?? item?.qty ?? item?.count ?? 1);
+function calcShipping({ zip, subtotal, items }) {
+  if (subtotal >= 100) return 0;
+
+  const weight = items.reduce((w, it) => w + weightOf(it), 0);
+  if (weight <= 0) return 0;
+
+  let base;
+  if (weight <= 5) base = 4.99;
+  else if (weight <= 10) base = 8.99;
+  else base = 13.99 + Math.ceil(weight - 10) * 0.75;
+
+  // light local nudge (example for 275xx)
+  if (zip && String(zip).startsWith("275")) base = Math.max(0, base - 2);
+
+  return Number(base.toFixed(2));
 }
 
-/* Banner when not logged in */
+/* -------- banner (now includes redirect state) -------- */
 function RegisterDiscountBanner() {
+  const location = useLocation();
   return (
     <div
       className="card"
@@ -45,135 +69,98 @@ function RegisterDiscountBanner() {
         </div>
       </div>
       <div style={{ display: "flex", gap: 8 }}>
-        <Link className="btn primary" to="/signup">Register</Link>
-        <Link className="btn ghost" to="/login">Login</Link>
+        <Link
+          className="btn primary"
+          to="/signup"
+          state={{ from: location.pathname }} // 👈 return here after signup
+        >
+          Register
+        </Link>
+        <Link
+          className="btn ghost"
+          to="/login"
+          state={{ from: location.pathname }} // 👈 return here after login
+        >
+          Login
+        </Link>
       </div>
     </div>
   );
 }
 
-/* -------- shipping calculator -------- */
-function weightOf(item) {
-  // assume 1 lb per qty when priced per lb
-  if ((item.unit || "").toLowerCase() === "lb") return qtyOf(item);
-  // fallback: 0.5 lb each if unit unknown
-  return qtyOf(item) * (Number(item.weight) || 0.5);
-}
-function calcShipping({ zip, subtotal, items }) {
-  if (subtotal >= 100) return 0;
-
-  const weight = items.reduce((w, it) => w + weightOf(it), 0);
-
-  if (weight <= 0) return 0;
-  let base;
-  if (weight <= 5) base = 4.99;
-  else if (weight <= 10) base = 8.99;
-  else {
-    const extra = Math.ceil(weight - 10);
-    base = 13.99 + extra * 0.75;
-  }
-
-  // example local discount for 275xx
-  if (zip && String(zip).startsWith("275")) {
-    base = Math.max(0, base - 2);
-  }
-  return Number(base.toFixed(2));
-}
-
+/* ---------------- page ---------------- */
 export default function Checkout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // user
   let userCtx = {};
   try { userCtx = useUser(); } catch {}
   const user = userCtx?.user || null;
 
-  // cart
+  // cart context (adapt to whatever your store exposes)
   let cartCtx = {};
   try { cartCtx = useCart(); } catch {}
   const cart = Array.isArray(cartCtx?.cart) ? cartCtx.cart : [];
 
-  const updateQty   = cartCtx?.updateQty;
-  const increment   = cartCtx?.increment;
-  const decrement   = cartCtx?.decrement;
-  const addItem     = cartCtx?.addItem;
-  const removeItem  = cartCtx?.removeItem;
-  const remove      = cartCtx?.remove;
-  const dispatch    = cartCtx?.dispatch;
-  const clearCart   = cartCtx?.clearCart || (() => {});
+  const updateQty  = cartCtx?.updateQty;
+  const increment  = cartCtx?.increment;
+  const decrement  = cartCtx?.decrement;
+  const removeItem = cartCtx?.removeItem;
+  const remove     = cartCtx?.remove;
+  const dispatch   = cartCtx?.dispatch;
+  const clearCart  = cartCtx?.clearCart || (() => {});
 
-  // qty actions (MOST ROBUST VERSION)
-  function setQty(item, nextQty) {
-    const targetQty = Math.max(1, Math.min(99, Number(nextQty) || 1));
+  // robust quantity controls that try multiple API shapes
+  function setQty(item, next) {
+    const target = Math.max(1, Math.min(99, Number(next) || 1));
     const k = keyOf(item);
 
-    // 1. Try context's updateQty function with key or item
-    if (tryCall(updateQty, k, targetQty)) return;
-    if (tryCall(updateQty, item, targetQty)) return;
+    // preferred direct update
+    if (tryCall(updateQty, k, target)) return;
+    if (tryCall(updateQty, item, target)) return;
 
-    // 2. Fallback: If not, simulate the change using inc/dec loops
+    // fallback via inc/dec loops
     const current = qtyOf(item);
-    if (targetQty > current) {
-      for (let i = 0; i < targetQty - current; i++) {
-        // Try increment logic
+    if (target > current) {
+      const steps = target - current;
+      for (let i = 0; i < steps; i++) {
         if (tryCall(increment, k)) continue;
         if (tryCall(dispatch, { type: "INCREMENT", payload: k })) continue;
       }
       return;
     }
-    if (targetQty < current) {
-      for (let i = 0; i < current - targetQty; i++) {
-        // Try decrement logic
+    if (target < current) {
+      const steps = current - target;
+      for (let i = 0; i < steps; i++) {
         if (tryCall(decrement, k)) continue;
         if (tryCall(dispatch, { type: "DECREMENT", payload: k })) continue;
       }
       return;
     }
   }
-
   function inc(item) {
     const k = keyOf(item);
-    // 1. Try context's increment function (preferred)
     if (tryCall(increment, k)) return;
-
-    // 2. Fallback: Try dispatching common action types
     if (tryCall(dispatch, { type: "INCREMENT", payload: k })) return;
-    if (tryCall(dispatch, { type: "ADD_ONE", payload: k })) return;
-
-    // 3. Final Fallback: Use setQty (which recalculates)
     setQty(item, qtyOf(item) + 1);
   }
-
   function dec(item) {
     if (qtyOf(item) <= 1) return;
-
     const k = keyOf(item);
-    // 1. Try context's decrement function (preferred)
     if (tryCall(decrement, k)) return;
-
-    // 2. Fallback: Try dispatching common action types
     if (tryCall(dispatch, { type: "DECREMENT", payload: k })) return;
-    if (tryCall(dispatch, { type: "REMOVE_ONE", payload: k })) return;
-
-    // 3. Final Fallback: Use setQty
     setQty(item, qtyOf(item) - 1);
   }
-
   function removeLine(item) {
     const k = keyOf(item);
-    // 1. Try context's dedicated remove functions (preferred)
     if (tryCall(removeItem, k)) return;
     if (tryCall(remove, k)) return;
-
-    // 2. Fallback: Try dispatching common action types
     if (tryCall(dispatch, { type: "REMOVE", payload: k })) return;
-    if (tryCall(dispatch, { type: "REMOVE_ITEM", payload: k })) return;
-
-    // 3. Final Fallback: Set quantity to zero
     if (tryCall(updateQty, k, 0)) return;
   }
 
-  // form
+  // form (persist name/address briefly for user convenience)
   const [form, setForm] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem("vsf_checkout_contact") || "null");
@@ -198,25 +185,24 @@ export default function Checkout() {
     () => cart.reduce((n, it) => n + (Number(it.price) || 0) * qtyOf(it), 0),
     [cart]
   );
-
   const [shipping, setShipping] = useState(0);
 
-  // 🔄 auto-recalc shipping when ZIP/cart/subtotal changes
   useEffect(() => {
-    const next = calcShipping({ zip: form.zip, subtotal, items: cart });
-    setShipping(next);
-  }, [form.zip, cart, subtotal]);
+    setShipping(calcShipping({ zip: form.zip, subtotal, items: cart }));
+  }, [form.zip, subtotal, cart]);
 
-  const tax = 0; // add if needed
+  const tax = 0;
   const total = subtotal + shipping + tax;
 
   function goToPayment(e) {
     e.preventDefault();
     if (!form.firstName || !form.lastName || !form.address1 || !form.city || !form.state || !form.zip) {
+      // NOTE: alert() should be replaced with a custom modal in production
       alert("Please complete your name and delivery address.");
       return;
     }
     if (!form.email && !form.phone) {
+      // NOTE: alert() should be replaced with a custom modal in production
       alert("Please provide email or phone.");
       return;
     }
@@ -355,16 +341,20 @@ export default function Checkout() {
             </div>
           </div>
 
-          <div className="row" style={{ gap: 12 }}>
+          {/* FIX: Moved hint text out of the field div to prevent misalignment */}
+          <div className="row" style={{ gap: 12, alignItems: 'flex-start' }}>
             <div style={{ flex: 1 }} className="field">
               <label>Email</label>
               <input className="input" style={{ height: 48 }} type="email" value={form.email} onChange={set("email")} />
-              <div className="hint">Provide either email or phone.</div>
             </div>
             <div style={{ flex: 1 }} className="field">
               <label>Phone</label>
               <input className="input" style={{ height: 48 }} value={form.phone} onChange={set("phone")} />
             </div>
+          </div>
+          {/* HINT is now outside the row to affect both fields equally, or just display below them */}
+          <div className="hint" style={{ marginTop: -12, marginBottom: 8 }}>
+            Provide either email or phone.
           </div>
 
           <div style={{ marginTop: 8 }}>

@@ -40,15 +40,35 @@ function reducer(state, action) {
         },
       ];
     }
+
     case "REMOVE": {
+      // Action payload expects: { key: 'itemKey' }
       return state.filter(i => i.key !== action.payload.key);
     }
+
     case "SET_QTY": {
       const { key, qty } = action.payload;
       return state.map(i => (i.key === key ? { ...i, quantity: Math.max(1, Math.min(99, qty)) } : i));
     }
+
+    // --- QTY HANDLERS ---
+    case "INCREMENT": {
+        const key = action.payload.key;
+        const item = state.find(i => i.key === key);
+        if (!item) return state;
+        return state.map(i => i.key === key ? { ...i, quantity: Math.min(99, i.quantity + 1) } : i);
+    }
+
+    case "DECREMENT": {
+        const key = action.payload.key;
+        const item = state.find(i => i.key === key);
+        if (!item || item.quantity <= 1) return state; // Prevent going below 1
+        return state.map(i => i.key === key ? { ...i, quantity: i.quantity - 1 } : i);
+    }
+
     case "CLEAR":
       return [];
+
     default:
       return state;
   }
@@ -66,11 +86,34 @@ export function CartProvider({ children }) {
   );
 
   const addToCart = (product, qty = 1) => dispatch({ type: "ADD", payload: { product, qty } });
-  const removeFromCart = key => dispatch({ type: "REMOVE", payload: { key } });
+
+  // NOTE: Key is passed directly, so payload MUST be { key: 'itemKey' }
+  const removeCartItem = key => dispatch({ type: "REMOVE", payload: { key } });
+
   const setQty = (key, qty) => dispatch({ type: "SET_QTY", payload: { key, qty } });
   const clearCart = () => dispatch({ type: "CLEAR" });
 
-  const value = { cart, count, subtotal, addToCart, removeFromCart, setQty, clearCart, dispatch };
+  // --- EXPOSED FUNCTIONS ---
+  const increment = (key) => dispatch({ type: "INCREMENT", payload: { key } });
+  const decrement = (key) => dispatch({ type: "DECREMENT", payload: { key } });
+  // We expose the removal function under two names for compatibility with Cart.jsx
+  const removeFromCart = removeCartItem; // Standard context name
+  const removeItem = removeCartItem;     // Match Cart.jsx fallback name
+
+  const value = {
+      cart,
+      count,
+      subtotal,
+      addToCart,
+      removeFromCart,
+      removeItem, // <--- EXPOSED: Matches the fallback name used in Cart.jsx
+      setQty,
+      clearCart,
+      dispatch,
+      increment,
+      decrement
+  };
+
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 

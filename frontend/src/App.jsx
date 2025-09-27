@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Payment from "./pages/Payment";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
